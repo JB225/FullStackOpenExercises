@@ -29,11 +29,10 @@ const App = () => {
         id: persons.length + 1
       }
 
-      axios
-        .post('http://localhost:3001/persons', nameObject)
-        .then(response => {
-          console.log(response)
-          setPersons(persons.concat(nameObject))
+      personService
+        .create(nameObject)
+        .then(newPerson => {
+          setPersons(persons.concat(newPerson))
           setNewName('')
           setNewNumber('')        
         })
@@ -52,6 +51,19 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const handleDeletePerson = (name, id) => {
+    if (window.confirm(`Delete ${name}?`)) {
+      console.log(`DELETED ${name}`)
+
+      axios
+        .delete(`http://localhost:3001/persons/${id}`)
+        .then(response => {
+          console.log(persons)
+          // TODO: Use state hook to update react information
+        })
+    }
+  }
+
   const personsToShow = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
   return (
@@ -61,7 +73,7 @@ const App = () => {
       <h2>Add a new number</h2>
       <PersonForm name={newName} number={newNumber} nameHandler={handleNewName} numberHandler={handleNewNumber} addHandler={addPerson}/>
       <h2>Numbers</h2>
-      <Numbers persons={personsToShow}/>
+      <Numbers persons={personsToShow} deleteHandler={handleDeletePerson}/>
     </div>
   )
 }

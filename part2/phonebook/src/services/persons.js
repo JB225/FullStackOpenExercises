@@ -7,8 +7,8 @@ const getAll = () => {
 }
 
 const create = newObject => {
-  // TODO: refactor to use this method
-  return axios.post(baseUrl, newObject)
+  const request = axios.post(baseUrl, newObject)
+  return request.then(response => response.data)
 }
 
-export default { getAll, create}
+export default {getAll, create}
