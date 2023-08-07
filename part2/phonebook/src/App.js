@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Numbers from './components/Numbers'
@@ -15,13 +14,24 @@ const App = () => {
   const [filter, setFilter] = useState('')
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-
+ 
   const addPerson = (event) => {
     event.preventDefault()
     const filteredPersons = persons.filter(person => person.name === newName)
 
     if (filteredPersons.length > 0) {
-      alert(`${newName} is already in the phonebook`)
+      const updateID = filteredPersons[0].id
+      if (window.confirm(`${newName} is already added to the phonebook, would you like to replace the old number?`)) {
+        const updatedPerson = {
+          name: newName,
+          number: newNumber,
+          id: updateID
+        }
+
+        personService
+          .updateNumber(updateID, updatedPerson)
+          .then(setPersons(persons.map(p => p.id !== updateID ? p : updatedPerson)))
+      }
     } else {
       const nameObject = {
         name: newName,
@@ -53,14 +63,7 @@ const App = () => {
 
   const handleDeletePerson = (name, id) => {
     if (window.confirm(`Delete ${name}?`)) {
-      console.log(`DELETED ${name}`)
-
-      axios
-        .delete(`http://localhost:3001/persons/${id}`)
-        .then(response => {
-          console.log(persons)
-          // TODO: Use state hook to update react information
-        })
+      personService.deletePerson(id).then(setPersons(persons.filter(person => person.id !== id)))
     }
   }
 
@@ -80,5 +83,3 @@ const App = () => {
 
 export default App
 
-// Start json server with: json-server --port 3001 --watch db.json
-// Start application with: npm start
