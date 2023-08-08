@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Numbers from './components/Numbers'
+import Notification from './components/Notification'
 import personService from './services/persons'
 
 const App = () => {
@@ -14,6 +15,7 @@ const App = () => {
   const [filter, setFilter] = useState('')
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [personAddedMessage, setPersonAddedMessage] = useState(null)
  
   const addPerson = (event) => {
     event.preventDefault()
@@ -44,7 +46,8 @@ const App = () => {
         .then(newPerson => {
           setPersons(persons.concat(newPerson))
           setNewName('')
-          setNewNumber('')        
+          setNewNumber('')
+          showPersonAddedNotification(newName)        
         })
     }
   }
@@ -69,9 +72,15 @@ const App = () => {
 
   const personsToShow = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
+  const showPersonAddedNotification = (name) => {
+    setPersonAddedMessage(`Added ${name}`)
+    setTimeout(() => {setPersonAddedMessage(null)}, 5000)
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={personAddedMessage}/>
       <Filter filter={filter} handler={handleNewFilter}/>
       <h2>Add a new number</h2>
       <PersonForm name={newName} number={newNumber} nameHandler={handleNewName} numberHandler={handleNewNumber} addHandler={addPerson}/>
@@ -82,4 +91,3 @@ const App = () => {
 }
 
 export default App
-
