@@ -16,6 +16,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [personAddedMessage, setPersonAddedMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
  
   const addPerson = (event) => {
     event.preventDefault()
@@ -33,6 +34,11 @@ const App = () => {
         personService
           .updateNumber(updateID, updatedPerson)
           .then(setPersons(persons.map(p => p.id !== updateID ? p : updatedPerson)))
+          .catch(error => {
+            setErrorMessage(`Information of ${newName} has already been removed from the server`)
+            setTimeout(() => {setErrorMessage(null)}, 5000)
+
+          })
       }
     } else {
       const nameObject = {
@@ -80,7 +86,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={personAddedMessage}/>
+      <Notification message={personAddedMessage} color={'green'}/>
+      <Notification message={errorMessage} color={'red'}/>
       <Filter filter={filter} handler={handleNewFilter}/>
       <h2>Add a new number</h2>
       <PersonForm name={newName} number={newNumber} nameHandler={handleNewName} numberHandler={handleNewNumber} addHandler={addPerson}/>
