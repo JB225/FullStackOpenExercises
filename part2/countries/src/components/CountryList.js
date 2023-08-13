@@ -1,39 +1,19 @@
 import CountryInformation from "./CountryInformation"
 
-const CountryList = ({countries}) => {
-    if (countries.length >= 10) {
+const CountryList = ({countries, selectCountryHandler}) => {
         return (
             <div>
                 <br></br>
-                <div>Too many matches, specify another filter</div>
-            </div>
-        )
-    } else if (countries.length === 0) {
-        return (
-            <div>
-                <br></br>
-                <div>No matches, specify another filter</div>
-            </div>
-        )
-    } else if (countries.length === 1) {
-        return (
-            <div>
-                <CountryInformation country={countries[0]} />
-            </div>
-        )
-    } else {
-        return (
-            <div>
-                <br></br>
-                {countries.map(country => 
+                {countries.length >= 10 && <div>Too many matches, specify another filter</div>}
+                {countries.length === 0 && <div>No matches, specify another filter</div>}
+                {countries.length === 1 && < CountryInformation country={countries[0]} />}
+                {countries.length > 1 && countries.length < 10 && countries.map(country => 
                     <div key={country.name.official}>
                         {country.name.common} {}
-                        <button>show</button>
-                    </div>)}
+                        <button value={country.name.common} onClick={selectCountryHandler}>show</button>
+                    </div>) }
             </div>
         )
-    }
-
 }
 
 export default CountryList

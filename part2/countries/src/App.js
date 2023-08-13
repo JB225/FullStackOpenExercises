@@ -15,6 +15,11 @@ function App() {
     setFilter(event.target.value)
   }
 
+  const handleCountrySelected = (event) => {
+    event.preventDefault()
+    setFilter(event.target.value)
+  }
+
   const countriesToShow = countries.filter(country => {
     return country.name.common.toLowerCase().includes(filter.toLowerCase())
   })
@@ -22,7 +27,7 @@ function App() {
   return (
     <div>
       <CountryFilter handler={handleCountryFilter}/>
-      <CountryList countries={countriesToShow}/>
+      <CountryList countries={countriesToShow} selectCountryHandler={handleCountrySelected} />
     </div>
   );
 }
