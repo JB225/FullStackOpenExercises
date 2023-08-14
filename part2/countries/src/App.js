@@ -27,13 +27,16 @@ function App() {
 
   const handleCountrySelected = (country) => {
     setFilter(country.name.common)
-    setWeatherLat(country.latlng[0])
-    setWeatherLong(country.latlng[1])
   }
 
   const countriesToShow = countries.filter(country => {
     return country.name.common.toLowerCase().includes(filter.toLowerCase())
   })
+
+  const updateLatLongValues = (country) => {
+    setWeatherLat(country.latlng[0])
+    setWeatherLong(country.latlng[1])
+  }
 
   return (
     <div>
@@ -41,7 +44,8 @@ function App() {
       <CountryList 
         countries={countriesToShow} 
         selectCountryHandler={handleCountrySelected} 
-        selectedCountryWeather={selectedCountryWeather} 
+        selectedCountryWeather={selectedCountryWeather}
+        updateLatLongValues={updateLatLongValues}
       />
     </div>
   );

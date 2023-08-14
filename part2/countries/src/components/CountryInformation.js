@@ -1,4 +1,6 @@
-const CountryInformation = ({country, selectedCountryWeather}) => {
+const CountryInformation = ({country, selectedCountryWeather, updateLatLongValues}) => {
+    updateLatLongValues(country)
+
     return (
         <div>
             <h1>{country.name.common}</h1>
