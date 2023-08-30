@@ -37,7 +37,6 @@ const App = () => {
           .catch(error => {
             setErrorMessage(`Information of ${newName} has already been removed from the server`)
             setTimeout(() => {setErrorMessage(null)}, 5000)
-
           })
       }
     } else {
@@ -54,6 +53,10 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           showPersonAddedNotification(newName)        
+        })
+        .catch(error => {
+          setErrorMessage(error.response.data.error)
+          setTimeout(() => {setErrorMessage(null)}, 5000)
         })
     }
   }
